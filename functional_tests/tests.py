@@ -8,8 +8,9 @@ class NewVisitorTest(FunctionalTest):
         self.browser.get(self.live_server_url)
 
         # He notices that the homepage is explaining the meaning of the project "Lorum".
-        self.assertContains('Lorum Project', self.browser.title)
-        self.assertContains('Lorum', self.browser.find_element_by_tag_name('h1').text)
+        self.assertEqual(self.browser.title, 'Lorum Project')
+        self.assertIn('Lorum', self.browser.find_element_by_tag_name('h1').text)
 
         # He is invited to enter a forum straight away...
-        self.fail('finish functional tests')
+        self.browser.find_element_by_id('id-forum').click()
+        self.assertEqual(self.browser.title, 'Forum')
