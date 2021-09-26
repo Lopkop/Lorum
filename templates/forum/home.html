@@ -6,7 +6,13 @@
 </head>
 <body>
 <h1>Welcome to Lorum's Forum</h1>
-
-
+<div>
+    {% for article in articles %}
+    <h3>{{ article.title }}</h3>
+    {{ article.user }}
+    <time>{{ article.created_date.day }}.{{ article.created_date.month }}.{{ article.created_date.year }}</time><br>
+    <a href="{% url 'article' article.pk %}" id="article-id">read more</a>
+    {% endfor %}
+</div>
 </body>
 </html>
