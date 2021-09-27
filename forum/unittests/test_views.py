@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase
 
-from forum.models import Article
+from forum.models import Article, Comment
 
 
 class TestMainForumPage(TestCase):
@@ -37,3 +38,21 @@ class TestArticlePage(TestCase):
         self.assertIn(self.article.title.encode(), self.response.content)
         self.assertIn(self.article.body.encode(), self.response.content)
         self.assertIn(str(self.article.user).encode(), self.response.content)
+
+    def test_comments_displays_on_the_page(self):
+        text = 'hahaha'
+        second_text = 'no no no'
+
+        comment = Comment.objects.create(user=self.article.user, article=self.article, body=text)
+        second_comment = Comment.objects.create(user=self.article.user, article=self.article, body=second_text)
+
+        comment.save()
+        second_comment.save()
+
+        # Refresh the page to see comments
+        response = self.client.get(f'/forum/{self.article.pk}')
+
+        self.assertEqual(text, comment.body)
+        self.assertEqual(second_text, second_comment.body)
+        self.assertIn(comment.body.encode(), response.content)
+        self.assertIn(second_comment.body.encode(), response.content)

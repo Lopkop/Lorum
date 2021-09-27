@@ -1,8 +1,8 @@
 from django.urls import path
 
-from .views import ForumPageView, ArticleView
+from .views import ForumPageView, article_view
 
 urlpatterns = [
     path('', ForumPageView.as_view(), name='forum'),
-    path('<int:pk>', ArticleView.as_view(), name='article'),
+    path('<int:pk>', article_view, name='article'),
 ]

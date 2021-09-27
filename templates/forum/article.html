@@ -17,5 +17,22 @@
     <time>{{ article.updated_date.day }}.{{ article.updated_date.month }}.{{ article.updated_date.year }} at {{ article.updated_date.time }}</time><br>
 </div>
 
+
+<div>
+    <h3>Share your opinion</h3>
+    <form method="post">
+        {% csrf_token %}
+        <p id="comment-text">{{ comment_form.as_p }}</p>
+        <input id="comment-id" type="submit">
+    </form>
+</div>
+
+<div>
+    {% for comment in comments %}
+    {{ comment.user }} - <time>{{ comment.created_date.day }}.{{ comment.created_date.month }}.{{ comment.created_date.year }} at {{ comment.created_date.time }}</time><br>
+    <p id="comment">{{ comment }}</p>
+    {% endfor %}
+</div>
+
 </body>
 </html>

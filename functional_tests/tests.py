@@ -33,7 +33,16 @@ class NewVisitorTest(FunctionalTest):
 
         # He found an interesting article and wants to read about this topic...
         self.browser.find_element_by_id('article-id').click()
-        sleep(5)
+        sleep(1)
         self.assertEqual('100 good news', self.browser.title)
 
-        # He wants to chat with other people about this article...
+        # He wants to write comment about this article...
+        input_box = self.browser.find_element_by_id('id_body')
+        input_box.send_keys('very interesting article!')
+        self.browser.find_element_by_id('comment-id').click()
+        sleep(1)
+
+        # but unfortunately, he is not logged in on the website
+        self.assertEqual("Sorry, but you can't comment any post in security concerns, because you are not logged in.",
+                         self.browser.find_element_by_id('id-error').text)
+
