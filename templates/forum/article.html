@@ -8,13 +8,15 @@
 <div>
     <h1>{{ article }}</h1>
     author: {{ article.user }}
+    <p>{{ count_of_comments }} comments</p>
+
     <time>{{ article.created_date.day }}.{{ article.created_date.month }}.{{ article.created_date.year }}</time><br>
 
     <div>
         <p>{{ article.body }}</p>
     </div>
 
-    <time>{{ article.updated_date.day }}.{{ article.updated_date.month }}.{{ article.updated_date.year }} at {{ article.updated_date.time }}</time><br>
+    last update: <time>{{ article.updated_date.day }}.{{ article.updated_date.month }}.{{ article.updated_date.year }} at {{ article.updated_date.time }}</time><br>
 </div>
 
 

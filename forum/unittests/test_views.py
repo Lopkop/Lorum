@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase
 
-from forum.models import Article, Comment
+from forum.models import Article
+from ..services import create_comment, create_article, get_article_comments
 
 
 class TestMainForumPage(TestCase):
@@ -23,9 +23,8 @@ class TestArticlePage(TestCase):
             password='passwordsecret'
         )
 
-        self.article = Article.objects.create(user=self.user, title='100 good news', body='1. I ate some tomato...')
-        self.article.save()
-
+        create_article(user=self.user, title='100 good news', body='1. I ate some tomato...')
+        self.article = Article.objects.all()[0]
         self.response = self.client.get(f'/forum/{self.article.pk}')
 
     def test_page_works(self):
@@ -43,11 +42,10 @@ class TestArticlePage(TestCase):
         text = 'hahaha'
         second_text = 'no no no'
 
-        comment = Comment.objects.create(user=self.article.user, article=self.article, body=text)
-        second_comment = Comment.objects.create(user=self.article.user, article=self.article, body=second_text)
+        create_comment(self.user, self.article, text)
+        create_comment(self.user, self.article, second_text)
 
-        comment.save()
-        second_comment.save()
+        comment, second_comment = get_article_comments(self.article)
 
         # Refresh the page to see comments
         response = self.client.get(f'/forum/{self.article.pk}')
