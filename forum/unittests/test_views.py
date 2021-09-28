@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from forum.models import Article
-from ..services import create_comment, create_article, get_article_comments
+from ..services import create_comment, create_article, get_article_comments, create_or_delete_like
 
 
 class TestMainForumPage(TestCase):
@@ -54,3 +54,17 @@ class TestArticlePage(TestCase):
         self.assertEqual(second_text, second_comment.body)
         self.assertIn(comment.body.encode(), response.content)
         self.assertIn(second_comment.body.encode(), response.content)
+
+    def test_likes_displays_on_the_page(self):
+        second_user = get_user_model().objects.create_user(
+            username='Emma',
+            password='secretpassw4'
+        )
+
+        create_or_delete_like(self.user, self.article)
+        create_or_delete_like(second_user, self.article)
+
+        # Refresh the page to see likes
+        response = self.client.get(f'/forum/{self.article.pk}')
+
+        self.assertIn('2 likes'.encode(), response.content)

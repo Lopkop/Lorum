@@ -50,7 +50,7 @@ class TestLike(TestCase):
         self.article.save()
 
     def test_save_and_retrieve(self):
-        like = Like.objects.create(article=self.article, count=5)
+        like = Like.objects.create(user=self.user, article=self.article, count=5)
         like.save()
 
         self.assertEqual(str(like), '5')

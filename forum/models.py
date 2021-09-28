@@ -14,6 +14,7 @@ class Article(models.Model):
 
 
 class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     count = models.IntegerField()
 

@@ -18,7 +18,7 @@ class NewVisitorTest(FunctionalTest):
 
         super().setUp()
 
-    def test_user_can_send_messages_on_the_forum(self):
+    def test_user_cannot_send_message_or_like_on_the_forum_while_logged_out(self):
         # John has heard about a cool new online forum.
         # He goes to check out its homepage.
         self.browser.get(self.live_server_url)
@@ -43,6 +43,18 @@ class NewVisitorTest(FunctionalTest):
         sleep(1)
 
         # but unfortunately, he is not logged in on the website
-        self.assertEqual("Sorry, but you can't comment any post in security concerns, because you are not logged in.",
-                         self.browser.find_element_by_id('id-error').text)
+        self.assertEqual(
+            "Sorry, but you can't comment or like any post in security concerns, because you are not logged in.",
+            self.browser.find_element_by_id('id-error').text)
 
+        # He step back...
+        self.browser.back()
+
+        # and just want to like this article...
+        self.browser.find_element_by_id('like-id').click()
+        sleep(1)
+
+        # but unfortunately, the same error is raised.
+        self.assertEqual(
+            "Sorry, but you can't comment or like any post in security concerns, because you are not logged in.",
+            self.browser.find_element_by_id('id-error').text)
