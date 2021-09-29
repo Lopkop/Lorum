@@ -5,7 +5,7 @@ from django.views import generic
 
 from forum.models import Article, Like
 from .forms import CommentForm
-from .services import create_comment, get_article, get_article_comments, create_or_delete_like, get_article_likes
+from .services import create_comment, get_article, create_or_delete_like
 
 
 class ForumPageView(generic.ListView):
@@ -26,6 +26,6 @@ def article_view(request, pk):
             create_or_delete_like(request.user, article)
 
     return render(request, 'forum/article.html', {'article': article, 'comment_form': CommentForm,
-                                                  'comments': get_article_comments(article),
-                                                  'count_of_comments': get_article_comments(article).count(),
-                                                  'likes': get_article_likes(article).count()})
+                                                  'comments': article.get_comments(article),
+                                                  'count_of_comments': article.get_comments(article).count(),
+                                                  'likes': article.get_likes(article).count()})

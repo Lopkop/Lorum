@@ -17,11 +17,3 @@ def create_or_delete_like(user, article):
 
 def get_article(pk):
     return Article.objects.get(pk=pk)
-
-
-def get_article_comments(article):
-    return Comment.objects.filter(article=article)
-
-
-def get_article_likes(article):
-    return Like.objects.filter(article=article)

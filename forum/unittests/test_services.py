@@ -4,10 +4,8 @@ from django.test import TestCase
 from forum.models import Article, Comment, Like
 from ..services import (create_comment,
                         create_article,
-                        get_article_comments,
                         get_article,
                         create_or_delete_like,
-                        get_article_likes
                         )
 
 
@@ -47,26 +45,5 @@ class TestServices(TestCase):
 
         self.assertEqual(0, Like.objects.all().count())
 
-    def test_get_article_comments(self):
-        create_comment(self.user, self.article, 'hey!')
-        create_comment(self.user, self.article, 'bye!')
-        comments = get_article_comments(self.article)
-
-        self.assertEqual(2, comments.count())
-        self.assertEqual('hey!', comments[0].body)
-        self.assertEqual('bye!', comments[1].body)
-
     def test_get_article(self):
         self.assertEqual(self.article, get_article(self.article.pk))
-
-    def test_get_article_likes(self):
-        # Setup second user is necessary, otherwise the function would delete like
-        second_user = get_user_model().objects.create_user(
-            username='Emma',
-            password='secretpassw4'
-        )
-        create_or_delete_like(self.user, self.article)
-
-        create_or_delete_like(second_user, self.article)
-
-        self.assertEqual(2, get_article_likes(self.article).count())

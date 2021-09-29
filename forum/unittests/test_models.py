@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
+from ..services import create_comment, create_or_delete_like
 from ..models import Article, Comment, Like
 
 
@@ -11,13 +12,34 @@ class TestArticle(TestCase):
             password='secretpassword123'
         )
 
-    def test_save_and_retrieve(self):
-        article = Article.objects.create(user=self.user, title='World, hello!', body='Hello, world!')
-        article.save()
+        self.article = Article.objects.create(user=self.user, title='World, hello!', body='Hello, world!')
+        self.article.save()
 
-        self.assertEqual(str(article), 'World, hello!')
-        self.assertEqual(article.body, 'Hello, world!')
-        self.assertEqual(article.user, self.user)
+    def test_save_and_retrieve(self):
+        self.assertEqual(str(self.article), 'World, hello!')
+        self.assertEqual(self.article.body, 'Hello, world!')
+        self.assertEqual(self.article.user, self.user)
+
+    def test_get_article_comments(self):
+        create_comment(self.user, self.article, 'hey!')
+        create_comment(self.user, self.article, 'bye!')
+        comments = self.article.get_comments(self.article)
+
+        self.assertEqual(2, comments.count())
+        self.assertEqual('hey!', comments[0].body)
+        self.assertEqual('bye!', comments[1].body)
+
+    def test_get_article_likes(self):
+        # Setup second user is necessary, otherwise the function would delete like
+        second_user = get_user_model().objects.create_user(
+            username='Emma',
+            password='secretpassw4'
+        )
+        create_or_delete_like(self.user, self.article)
+
+        create_or_delete_like(second_user, self.article)
+
+        self.assertEqual(2, self.article.get_likes(self.article).count())
 
 
 class TestComment(TestCase):

@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Lorum Project</title>
-</head>
-<body>
-<h1>Lorum</h1>
-<h3>Join our new <a href="{% url 'forum' %}" id="id-forum">forum</a></h3>
+{% extends '_base.html' %}
 
-</body>
-</html>
+{% block title %}Lorum Project{% endblock title %}
+
+
+{% block content %}
+<div>
+    <h1>Lorum Project</h1>
+    <h2>Our mission</h2>
+</div>
+{% endblock content %}

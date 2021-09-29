@@ -1,18 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Forum</title>
-</head>
-<body>
+{% extends '_base.html' %}
+
+{% block title %}Forum{% endblock title %}
+
+
+{% block content %}
 <h1>Welcome to Lorum's Forum</h1>
 <div>
+
     {% for article in articles %}
-    <h3>{{ article.title }}</h3>
-    {{ article.user }}
-    <time>{{ article.created_date.day }}.{{ article.created_date.month }}.{{ article.created_date.year }}</time><br>
-    <a href="{% url 'article' article.pk %}" id="article-id">read more</a>
+    <div>
+        <a href="{% url 'article' article.pk %}">
+            <a class="text-break">
+                <a href="{% url 'article' article.pk %}" id="article-id" class="" data-tp-primary="on" data-xf-init="preview-tooltip" style="color: #5a5a5a; text-decoration: none;">{{ article.title }}</a>
+                <small>
+                    comments: {{ article.get_comments }}
+                    likes: {{ article.get_likes }}
+                </small>
+            </a>
+            <small class="text-muted d-block">{{ article.user }} -
+                <time>{{ article.created_date.day }}.{{ article.created_date.month }}.{{ article.created_date.year }}
+                </time>
+            </small>
+        </a>
+    </div>
+    <br>
     {% endfor %}
 </div>
-</body>
-</html>
+{% endblock content %}
+
+

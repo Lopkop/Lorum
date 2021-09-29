@@ -9,6 +9,12 @@ class Article(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
+    def get_comments(self, article):
+        return Comment.objects.filter(article=article)
+
+    def get_likes(self, article):
+        return Like.objects.filter(article=article)
+
     def __str__(self):
         return self.title
 

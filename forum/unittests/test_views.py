@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from forum.models import Article
-from ..services import create_comment, create_article, get_article_comments, create_or_delete_like
+from ..services import create_comment, create_article, create_or_delete_like
 
 
 class TestMainForumPage(TestCase):
@@ -45,7 +45,7 @@ class TestArticlePage(TestCase):
         create_comment(self.user, self.article, text)
         create_comment(self.user, self.article, second_text)
 
-        comment, second_comment = get_article_comments(self.article)
+        comment, second_comment = self.article.get_comments(self.article)
 
         # Refresh the page to see comments
         response = self.client.get(f'/forum/{self.article.pk}')
