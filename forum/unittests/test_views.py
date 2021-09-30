@@ -67,4 +67,4 @@ class TestArticlePage(TestCase):
         # Refresh the page to see likes
         response = self.client.get(f'/forum/{self.article.pk}')
 
-        self.assertIn('2 likes'.encode(), response.content)
+        self.assertIn('2'.encode(), response.content)
