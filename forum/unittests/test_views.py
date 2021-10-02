@@ -7,10 +7,10 @@ from ..services import create_comment, create_article, create_or_delete_like
 
 class TestMainForumPage(TestCase):
     def setUp(self):
-        self.response = self.client.get('/forum/')
+        self.response = self.client.get('/forums/')
 
     def test_page_works(self):
-        self.assertEqual(self.response.status_code, 200)
+        self.assertEqual(200, self.response.status_code)
 
     def test_uses_right_template(self):
         self.assertTemplateUsed(self.response, 'forum/home.html')
@@ -23,9 +23,9 @@ class TestArticlePage(TestCase):
             password='passwordsecret'
         )
 
-        create_article(user=self.user, title='100 good news', body='1. I ate some tomato...')
+        create_article(user=self.user, title='100 good news', body='1. I ate some tomato...', category='other')
         self.article = Article.objects.all()[0]
-        self.response = self.client.get(f'/forum/{self.article.pk}')
+        self.response = self.client.get(f'/forums/other/{self.article.pk}')
 
     def test_page_works(self):
         self.assertEqual(self.response.status_code, 200)
@@ -48,7 +48,7 @@ class TestArticlePage(TestCase):
         comment, second_comment = self.article.get_comments(self.article)
 
         # Refresh the page to see comments
-        response = self.client.get(f'/forum/{self.article.pk}')
+        response = self.client.get(f'/forums/other/{self.article.pk}')
 
         self.assertEqual(text, comment.body)
         self.assertEqual(second_text, second_comment.body)
@@ -65,6 +65,33 @@ class TestArticlePage(TestCase):
         create_or_delete_like(second_user, self.article)
 
         # Refresh the page to see likes
-        response = self.client.get(f'/forum/{self.article.pk}')
+        response = self.client.get(f'/forums/other/{self.article.pk}')
 
         self.assertIn('2'.encode(), response.content)
+
+
+class TestAllCategories(TestCase):
+    def category_test(self, name):
+        response = self.client.get(f'/forums/{name}/')
+
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, f'forum/{name}.html')
+        self.assertContains(response, name.capitalize())
+
+    def test_programming_category(self):
+        self.category_test('programming')
+
+    def test_security_category(self):
+        self.category_test('security')
+
+    def test_math_category(self):
+        self.category_test('mathematics')
+
+    def test_physics_category(self):
+        self.category_test('physics')
+
+    def test_electronics_category(self):
+        self.category_test('electronics')
+
+    def test_other_category(self):
+        self.category_test('other')

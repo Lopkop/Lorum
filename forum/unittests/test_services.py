@@ -18,7 +18,7 @@ class TestServices(TestCase):
 
         self.article = Article.objects.create(user=self.user, title='World, hello!', body='Hello, world!')
         self.article.save()
-        self.response = self.client.get(f'/forum/{self.article.pk}')
+        self.response = self.client.get(f'/forums/{self.article.pk}')
 
     def test_create_comment(self):
         create_comment(self.user, self.article, 'lol')

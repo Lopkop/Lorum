@@ -13,7 +13,7 @@ class NewVisitorTest(FunctionalTest):
             password='passwordsecret'
         )
 
-        self.article = Article.objects.create(user=self.user, title='100 good news', body='1. I ate some tomato...')
+        self.article = Article.objects.create(user=self.user, title='100 good news', body='1. I ate some tomato...', category='programming')
         self.article.save()
 
         super().setUp()
@@ -32,6 +32,8 @@ class NewVisitorTest(FunctionalTest):
         self.assertEqual('Forum', self.browser.title)
 
         # He found an interesting article and wants to read about this topic...
+        self.browser.find_element_by_id('articles_1').click()
+
         self.browser.find_element_by_id('article-id').click()
         sleep(1)
         self.assertEqual('100 good news', self.browser.title)

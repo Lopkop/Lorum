@@ -1,17 +1,18 @@
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views import generic
 
-from forum.models import Article, Like
+from .models import Article
 from .forms import CommentForm
 from .services import create_comment, get_article, create_or_delete_like
+from .configs import categories
 
 
-class ForumPageView(generic.ListView):
-    model = Article
-    context_object_name = 'articles'
-    template_name = 'forum/home.html'
+def forum_page_view(request):
+    return render(request, 'forum/home.html', {'articles': Article.objects.all(),
+                                               '1_categories': categories[::2],
+                                               '2_categories': categories[1::2],
+                                               })
 
 
 def article_view(request, pk):
@@ -28,4 +29,29 @@ def article_view(request, pk):
     return render(request, 'forum/article.html', {'article': article, 'comment_form': CommentForm,
                                                   'comments': article.get_comments(article),
                                                   'count_of_comments': article.get_comments(article).count(),
-                                                  'likes': article.get_likes(article).count()})
+                                                  'likes': article.get_likes(article).count(),
+                                                  })
+
+
+def programming_page_view(request):
+    return render(request, 'forum/programming.html', {'articles': Article.objects.filter(category='programming')})
+
+
+def security_page_view(request):
+    return render(request, 'forum/security.html', {'articles': Article.objects.filter(category='cyber security')})
+
+
+def mathematics_page_view(request):
+    return render(request, 'forum/mathematics.html', {'articles': Article.objects.filter(category='mathematics')})
+
+
+def physics_page_view(request):
+    return render(request, 'forum/physics.html', {'articles': Article.objects.filter(category='physics')})
+
+
+def electronics_page_view(request):
+    return render(request, 'forum/electronics.html', {'articles': Article.objects.filter(category='electronics')})
+
+
+def other_page_view(request):
+    return render(request, 'forum/other.html', {'articles': Article.objects.filter(category='other')})

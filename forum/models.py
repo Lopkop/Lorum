@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from .configs import categories
+
 
 class Article(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default='account deleted')
@@ -8,6 +10,7 @@ class Article(models.Model):
     body = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+    category = models.CharField(max_length=30, choices=categories)
 
     def get_comments(self, article):
         return Comment.objects.filter(article=article)
@@ -31,7 +34,7 @@ class Like(models.Model):
 class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    body = models.CharField(max_length=556)
+    body = models.CharField(max_length=5000)
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

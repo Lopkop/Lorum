@@ -5,8 +5,11 @@ def create_comment(user, article, text):
     Comment.objects.create(user=user, article=article, body=text).save()
 
 
-def create_article(user, title, body):
-    Article.objects.create(user=user, title=title, body=body).save()
+def create_article(user, title, body, category=None):
+    if category:
+        Article.objects.create(user=user, title=title, body=body, category=category).save()
+    else:
+        Article.objects.create(user=user, title=title, body=body).save()
 
 
 def create_or_delete_like(user, article):
