@@ -20,3 +20,10 @@ def create_or_delete_like(user, article):
 
 def get_article(pk):
     return Article.objects.get(pk=pk)
+
+
+def edit_article(article, data):
+    article.title = data['title']
+    article.category = data['category']
+    article.body = data['body']
+    article.save()

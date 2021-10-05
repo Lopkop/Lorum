@@ -8,6 +8,9 @@ from .views import (article_view,
                     physics_page_view,
                     other_page_view,
                     security_page_view,
+                    my_articles_view,
+                    edit_article_view,
+                    delete_article_view,
                     )
 
 urlpatterns = [
@@ -26,4 +29,8 @@ urlpatterns = [
     path('other/', other_page_view, name='other'),
     path('mathematics/', mathematics_page_view, name='mathematics'),
     path('physics/', physics_page_view, name='physics'),
+
+    path('my-articles/', my_articles_view, name='my_articles'),
+    path('my-articles/<int:pk>/edit', edit_article_view, name='edit_article'),
+    path('my-articles/<int:pk>/delete', delete_article_view, name='delete_article'),
 ]

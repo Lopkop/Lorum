@@ -1,10 +1,12 @@
 from django.contrib.auth.models import AnonymousUser
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.core import exceptions
 
 from .models import Article
-from .forms import CommentForm
-from .services import create_comment, get_article, create_or_delete_like
+from .forms import CommentForm, ArticleForm
+from .services import create_comment, get_article, create_or_delete_like, edit_article
 from .configs import categories
 
 
@@ -31,6 +33,31 @@ def article_view(request, pk):
                                                   'count_of_comments': article.get_comments(article).count(),
                                                   'likes': article.get_likes(article).count(),
                                                   })
+
+
+def my_articles_view(request):
+    return render(request, 'forum/my_articles.html', {'articles': Article.objects.filter(user=request.user)})
+
+
+def edit_article_view(request, pk):
+    if request.user == (article := get_article(pk)).user:
+        if request.method == 'POST':
+            form = ArticleForm(request.POST)
+            if form.is_valid():
+                edit_article(article, form.cleaned_data)
+                return HttpResponseRedirect(reverse('my_articles'))
+        return render(request, 'forum/edit_article.html',
+                      {'form': ArticleForm({'title': article, 'category': article.category,
+                                            'body': article.body})})
+    raise exceptions.PermissionDenied()
+
+
+def delete_article_view(request, pk):
+    try:
+        Article.objects.filter(user=request.user, pk=get_article(pk).pk).delete()
+    except exceptions.ObjectDoesNotExist:
+        return HttpResponse('Article does not exist')
+    return redirect('/forums/my-articles/')
 
 
 def programming_page_view(request):

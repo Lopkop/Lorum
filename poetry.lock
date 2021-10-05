@@ -10,6 +10,14 @@ python-versions = ">=3.6"
 tests = ["pytest", "pytest-asyncio", "mypy (>=0.800)"]
 
 [[package]]
+name = "body"
+version = "0.1"
+description = "Calculating metric height and weight"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "django"
 version = "3.2.7"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
@@ -88,12 +96,15 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "d9c561754e0c60a733c15ee3db77fd18031dc8f6c83d65adedcf50548c6b22bc"
+content-hash = "2a03370c58d7556c2f529a9dc3188633ef3a65813612eed909ea8f300a4c940f"
 
 [metadata.files]
 asgiref = [
     {file = "asgiref-3.4.1-py3-none-any.whl", hash = "sha256:ffc141aa908e6f175673e7b1b3b7af4fdb0ecb738fc5c8b88f69f055c2415214"},
     {file = "asgiref-3.4.1.tar.gz", hash = "sha256:4ef1ab46b484e3c706329cedeff284a5d40824200638503f5768edb6de7d58e9"},
+]
+body = [
+    {file = "body-0.1-py2.py3-none-any.whl", hash = "sha256:943001b7acc7bba99545503ae2a8379de2fba5ec13843c7d5cc8155c9808f91a"},
 ]
 django = [
     {file = "Django-3.2.7-py3-none-any.whl", hash = "sha256:e93c93565005b37ddebf2396b4dc4b6913c1838baa82efdfb79acedd5816c240"},

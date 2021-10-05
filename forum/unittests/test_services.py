@@ -6,6 +6,7 @@ from ..services import (create_comment,
                         create_article,
                         get_article,
                         create_or_delete_like,
+                        edit_article
                         )
 
 
@@ -47,3 +48,9 @@ class TestServices(TestCase):
 
     def test_get_article(self):
         self.assertEqual(self.article, get_article(self.article.pk))
+
+    def test_edit_article(self):
+        edit_article(self.article, {'title': 'edited', 'body': 'edited body', 'category': 'other'})
+
+        self.assertEqual('edited', self.article.title)
+        self.assertEqual('edited body', self.article.body)

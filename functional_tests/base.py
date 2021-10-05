@@ -9,7 +9,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         options = webdriver.FirefoxOptions()
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--incognito')
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         self.browser = webdriver.Firefox(executable_path=values.get('GECKODRIVER_PATH'), options=options)
         self.browser.implicitly_wait(3)
 
