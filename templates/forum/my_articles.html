@@ -7,10 +7,14 @@
 {% block content %}
 <h1>Articles</h1>
 <h1 style="text-align: center">
-    Categories
+    Your articles
 </h1>
 
 <div>
+    <form action="{% url 'add_article' %}">
+        {% csrf_token %}
+        <button>Add article</button>
+    </form>
 {% for article in articles %}
     <div>
         <a class="text-break">

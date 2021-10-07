@@ -39,6 +39,14 @@ def my_articles_view(request):
     return render(request, 'forum/my_articles.html', {'articles': Article.objects.filter(user=request.user)})
 
 
+def create_article(request):
+    if request.method == 'POST':
+        Article.objects.create(user=request.user, title=request.POST.get('title'), body=request.POST.get('body'),
+                               category=request.POST.get('category'))
+        return redirect('/forums/my-articles')
+    return render(request, 'forum/add_article.html', {'form': ArticleForm})
+
+
 def edit_article_view(request, pk):
     if request.user == (article := get_article(pk)).user:
         if request.method == 'POST':

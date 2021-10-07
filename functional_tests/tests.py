@@ -13,12 +13,13 @@ class NewVisitorTest(FunctionalTest):
             password='passwordsecret'
         )
 
-        self.article = Article.objects.create(user=self.user, title='100 good news', body='1. I ate some tomato...', category='programming')
+        self.article = Article.objects.create(user=self.user, title='100 good news', body='1. I ate some tomato...',
+                                              category='programming')
         self.article.save()
 
         super().setUp()
 
-    def test_user_cannot_send_message_or_like_on_the_forum_while_logged_out(self):
+    def test_user_cannot_comment_or_like_on_the_forum_while_logged_out(self):
         # John has heard about a cool new online forum.
         # He goes to check out its homepage.
         self.browser.get(self.live_server_url)
@@ -60,3 +61,51 @@ class NewVisitorTest(FunctionalTest):
         self.assertEqual(
             "Sorry, but you can't comment or like any post in security concerns, because you are not logged in.",
             self.browser.find_element_by_id('id-error').text)
+
+    def test_user_can_send_comment_or_like_article(self):
+        # John has heard about a cool new online forum.
+        # He goes to check out its homepage.
+        self.browser.get(self.live_server_url)
+
+        # He notices that the homepage is explaining the meaning of the project "Lorum".
+        self.assertEqual('Lorum Project', self.browser.title)
+        self.assertIn('Lorum', self.browser.find_element_by_tag_name('h1').text)
+
+        # He want to signup
+        self.browser.find_element_by_id('signup').click()
+
+        self.browser.find_element_by_id('id_username').send_keys('John')
+        self.browser.find_element_by_id('id_password1').send_keys('BobIsMyFriend123')
+        self.browser.find_element_by_id('id_password2').send_keys('BobIsMyFriend123')
+
+        self.browser.find_element_by_id('submit_signup').click()
+
+        # Login
+        self.browser.find_element_by_id('id_username').send_keys('John')
+        self.browser.find_element_by_id('id_password').send_keys('BobIsMyFriend123')
+        self.browser.find_element_by_id('login').click()
+
+        # He is invited to enter a forum straight away...
+        self.browser.find_element_by_id('id-forum').click()
+        self.assertEqual('Forum', self.browser.title)
+
+        # He found an interesting article and wants to read about this topic...
+        self.browser.find_element_by_id('articles_1').click()
+
+        self.browser.find_element_by_id('article-id').click()
+        sleep(1)
+        self.assertEqual('100 good news', self.browser.title)
+
+        # He wants to write comment about this article.
+        input_box = self.browser.find_element_by_id('id_body')
+        input_box.send_keys('very interesting article!')
+        self.browser.find_element_by_id('comment-id').click()
+        self.assertEqual('very interesting article!', self.browser.find_element_by_id('comment').text)
+        self.assertEqual('1', self.browser.find_element_by_id('comments').text)
+
+        # self.assertIn('very interesting article!', self.browser.)
+
+        # and just want to like this article...
+        self.browser.find_element_by_id('like-id').click()
+        self.assertEqual('1', self.browser.find_element_by_id('likes').text)
+        sleep(1)

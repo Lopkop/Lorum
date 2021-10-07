@@ -11,6 +11,7 @@ from .views import (article_view,
                     my_articles_view,
                     edit_article_view,
                     delete_article_view,
+                    create_article
                     )
 
 urlpatterns = [
@@ -33,4 +34,5 @@ urlpatterns = [
     path('my-articles/', my_articles_view, name='my_articles'),
     path('my-articles/<int:pk>/edit', edit_article_view, name='edit_article'),
     path('my-articles/<int:pk>/delete', delete_article_view, name='delete_article'),
+    path('my-articles/create_article', create_article, name='add_article'),
 ]
