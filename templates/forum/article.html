@@ -57,7 +57,7 @@
     <div>
         <a id="comment" class="text-break">{{ comment }}</a>
         <small class="text-muted d-block">
-            {{ comment.user }} -
+            <a href="{% url 'user_page' comment.user.pk %}">{{ comment.user }}</a> -
             <time>{{ comment.created_date.day }}.{{ comment.created_date.month }}.{{ comment.created_date.year }}
                 at {{ comment.created_date.time }}
             </time>

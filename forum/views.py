@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -35,10 +36,12 @@ def article_view(request, pk):
                                                   })
 
 
+@login_required(login_url='/accounts/login/')
 def my_articles_view(request):
     return render(request, 'forum/my_articles.html', {'articles': Article.objects.filter(user=request.user)})
 
 
+@login_required(login_url='/accounts/login/')
 def create_article(request):
     if request.method == 'POST':
         Article.objects.create(user=request.user, title=request.POST.get('title'), body=request.POST.get('body'),
@@ -47,6 +50,7 @@ def create_article(request):
     return render(request, 'forum/add_article.html', {'form': ArticleForm})
 
 
+@login_required(login_url='/accounts/login/')
 def edit_article_view(request, pk):
     if request.user == (article := get_article(pk)).user:
         if request.method == 'POST':
@@ -60,6 +64,7 @@ def edit_article_view(request, pk):
     raise exceptions.PermissionDenied()
 
 
+@login_required(login_url='/accounts/login/')
 def delete_article_view(request, pk):
     try:
         Article.objects.filter(user=request.user, pk=get_article(pk).pk).delete()
